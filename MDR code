@@ -1,0 +1,83 @@
+const int ENA = 5;
+const int IN1 = 2;
+const int IN2 = 3;
+
+const int ENB = 6;
+const int IN3 = 4;
+const int IN4 = 7;
+
+const int metalSensor = A0;
+
+const int buzzer = 8;
+/
+const int threshold = 550;
+
+
+const int motorSpeed = 180;
+
+void setup()
+{
+  Serial.begin(9600);
+
+ 
+  pinMode(ENA, OUTPUT);
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+
+  pinMode(ENB, OUTPUT);
+  pinMode(IN3, OUTPUT);
+  pinMode(IN4, OUTPUT);
+
+  pinMode(buzzer, OUTPUT);
+  moveForward();
+
+  Serial.println("Metal Detecting Robot Started");
+}
+
+void loop()
+{
+  int sensorValue = analogRead(metalSensor);
+
+  Serial.print("Metal Value: ");
+  Serial.println(sensorValue);
+
+  if (sensorValue > threshold)         
+  {
+    stopRobot();
+
+    Serial.println("METAL DETECTED!");
+
+    digitalWrite(buzzer, HIGH);;
+    
+    delay(20000);    
+
+    digitalWrite(buzzer, LOW);
+    moveForward();
+  }
+
+  delay(100);
+}
+
+void moveForward()
+{
+  digitalWrite(IN1, HIGH);
+  digitalWrite(IN2, LOW);
+
+  digitalWrite(IN3, HIGH);
+  digitalWrite(IN4, LOW);
+
+  analogWrite(ENA, motorSpeed);
+  analogWrite(ENB, motorSpeed);
+}
+
+void stopRobot()
+{
+  analogWrite(ENA, 0);
+  analogWrite(ENB, 0);
+
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, LOW);
+
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, LOW);
+}
